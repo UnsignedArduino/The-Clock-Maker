@@ -1,6 +1,7 @@
 namespace SpriteKind {
     export const Item = SpriteKind.create()
     export const Outline = SpriteKind.create()
+    export const Text = SpriteKind.create()
 }
 namespace NumProp {
     export const spawn_x = NumProp.create()
@@ -70,13 +71,13 @@ function do_step (index: number) {
     pause(1000)
 }
 function fade_out (block: boolean) {
-    color.startFade(color.Black, color.originalPalette, 2000)
+    color.startFade(color.Black, color.originalPalette, 1000)
     if (block) {
         color.pauseUntilFadeDone()
     }
 }
 function fade_in (block: boolean) {
-    color.startFade(color.originalPalette, color.Black, 2000)
+    color.startFade(color.originalPalette, color.Black, 1000)
     if (block) {
         color.pauseUntilFadeDone()
     }
@@ -91,6 +92,7 @@ function make_hand () {
     sprite_hand_pointer.setFlag(SpriteFlag.Invisible, true)
     sprite_hand_pointer.z = 10
     controller.moveSprite(sprite_hand_pointer, 50, 50)
+    enable_dragging = true
     item_dragging = [][0]
 }
 function make_item (image2: Image, image_outline: Image, spawn_x: number, spawn_y: number, target_x: number, target_y: number, instructions: string, combined: Image) {
@@ -149,17 +151,29 @@ let item_dragging: Sprite = null
 let sprite_hand_pointer: Sprite = null
 let sprite_hand: Sprite = null
 let sprite_combined: Sprite = null
+let enable_dragging = false
 let sprite_outline: Sprite = null
 let sprite_item: Sprite = null
 let steps: blockObject.BlockObject[] = []
 let step_object: blockObject.BlockObject = null
 let sprite_step_bar: StatusBarSprite = null
-let enable_dragging = false
+let sprite_title: Sprite = null
 scene.setBackgroundColor(13)
 story.setPagePauseLength(1000, 2000)
-enable_dragging = true
-make_hand()
 timer.background(function () {
+    sprite_title = sprites.create(assets.image`title_screen`, SpriteKind.Text)
+    sprite_title.top = 0
+    sprite_title.left = 0
+    sprite_title.setFlag(SpriteFlag.Ghost, true)
+    sprite_title.setFlag(SpriteFlag.AutoDestroy, true)
+    fade_out(false)
+    while (!(controller.anyButton.isPressed())) {
+        pause(100)
+    }
+    sprite_title.ay = -500
+    fade_in(true)
+    fade_out(false)
+    make_hand()
     make_plastic_clock()
 })
 game.onUpdate(function () {
