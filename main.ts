@@ -14,6 +14,7 @@ namespace StrProp {
 namespace ImageProp {
     export const image = ImageProp.create()
     export const image_outline = ImageProp.create()
+    export const combined = ImageProp.create()
 }
 function do_step (index: number) {
     step_object = steps[index]
@@ -21,9 +22,6 @@ function do_step (index: number) {
         story.clearAllText()
         story.printDialog(blockObject.getStringProperty(step_object, StrProp.instructions), scene.screenWidth() / 2, scene.screenHeight() * 0.2 + 2, scene.screenHeight() * 0.4, scene.screenWidth() - 2)
     })
-    if (sprite_item) {
-        sprite_item.destroy()
-    }
     sprite_item = sprites.create(blockObject.getImageProperty(step_object, ImageProp.image), SpriteKind.Item)
     sprite_item.setPosition(blockObject.getNumberProperty(step_object, NumProp.spawn_x), blockObject.getNumberProperty(step_object, NumProp.spawn_y))
     sprite_item.z = 1
@@ -36,6 +34,13 @@ function do_step (index: number) {
     enable_dragging = false
     story.spriteMoveToLocation(sprite_item, sprite_outline.x, sprite_outline.y, 50)
     sprite_outline.destroy()
+    sprite_item.destroy()
+    if (sprite_combined) {
+        sprite_combined.setImage(blockObject.getImageProperty(step_object, ImageProp.combined))
+    } else {
+        sprite_combined = sprites.create(blockObject.getImageProperty(step_object, ImageProp.combined), SpriteKind.Player)
+    }
+    sprite_combined.setPosition(blockObject.getNumberProperty(step_object, NumProp.target_x), blockObject.getNumberProperty(step_object, NumProp.target_y))
 }
 function make_hand () {
     sprite_hand = sprites.create(assets.image`hand`, SpriteKind.Player)
@@ -49,10 +54,11 @@ function make_hand () {
     controller.moveSprite(sprite_hand_pointer, 50, 50)
     item_dragging = [][0]
 }
-function make_item (image2: Image, image_outline: Image, spawn_x: number, spawn_y: number, target_x: number, target_y: number, instructions: string) {
+function make_item (image2: Image, image_outline: Image, spawn_x: number, spawn_y: number, target_x: number, target_y: number, instructions: string, combined: Image) {
     block_object = blockObject.create()
     blockObject.setImageProperty(block_object, ImageProp.image, image2)
     blockObject.setImageProperty(block_object, ImageProp.image_outline, image_outline)
+    blockObject.setImageProperty(block_object, ImageProp.combined, combined)
     blockObject.setNumberProperty(block_object, NumProp.spawn_x, spawn_x)
     blockObject.setNumberProperty(block_object, NumProp.spawn_y, spawn_y)
     blockObject.setNumberProperty(block_object, NumProp.target_x, target_x)
@@ -63,7 +69,7 @@ function make_item (image2: Image, image_outline: Image, spawn_x: number, spawn_
 function make_plastic_clock () {
     steps = []
     step_number = 0
-    steps.push(make_item(assets.image`plastic_clock_face`, assets.image`plastic_clock_face_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the plastic clock cover to the center."))
+    steps.push(make_item(assets.image`plastic_clock_face`, assets.image`plastic_clock_face_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the plastic clock cover to the center.", assets.image`plastic_clock_step_1`))
     do_step(0)
 }
 let step_number = 0
@@ -71,6 +77,7 @@ let block_object: blockObject.BlockObject = null
 let item_dragging: Sprite = null
 let sprite_hand_pointer: Sprite = null
 let sprite_hand: Sprite = null
+let sprite_combined: Sprite = null
 let sprite_outline: Sprite = null
 let sprite_item: Sprite = null
 let steps: blockObject.BlockObject[] = []
