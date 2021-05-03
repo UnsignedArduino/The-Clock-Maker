@@ -86,6 +86,8 @@ function make_plastic_clock () {
     steps.push(make_item(assets.image`plastic_clock_edge`, assets.image`plastic_clock_edge_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the plastic clock edge piece on top of the cover.", assets.image`plastic_clock_step_2`))
     steps.push(make_item(assets.image`plastic_clock_minute_arm`, assets.image`plastic_clock_minute_arm_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the minute arm piece on top of the cover.", assets.image`plastic_clock_step_3`))
     steps.push(make_item(assets.image`plastic_clock_hour_arm`, assets.image`plastic_clock_hour_arm_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the hour arm piece on top of the minute arm.", assets.image`plastic_clock_step_4`))
+    steps.push(make_item(assets.image`plastic_clock_gear_box`, assets.image`plastic_clock_gear_box_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the gear box on top of the hour arm.", assets.image`plastic_clock_step_5`))
+    steps.push(make_item(assets.image`plastic_clock_backplate`, assets.image`plastic_clock_backplate_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the back plate on top of the gear box.", assets.image`plastic_clock_step_6`))
     init_step_bar(steps.length)
     for (let index = 0; index <= steps.length - 1; index++) {
         do_step(index)
@@ -96,6 +98,10 @@ function make_plastic_clock () {
             }
         })
     }
+    pause(1000)
+    story.clearAllText()
+    pause(1000)
+    sprite_combined.setImage(assets.image`plastic_clock_finished`)
 }
 let step_number = 0
 let block_object: blockObject.BlockObject = null
