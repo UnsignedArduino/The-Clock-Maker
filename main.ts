@@ -20,6 +20,53 @@ namespace ImageProp {
 namespace StatusBarKind {
     export const Steps = StatusBarKind.create()
 }
+function show_image_menu () {
+    selected_item = 0
+    while (true) {
+        if (options[selected_item - 1]) {
+            sprite_previous_item = sprites.create(options[selected_item - 1], SpriteKind.Player)
+        }
+        sprite_current_item = sprites.create(options[selected_item], SpriteKind.Player)
+        if (options[selected_item + 1]) {
+            sprite_next_item = sprites.create(options[selected_item + 1], SpriteKind.Player)
+        }
+        sprite_current_item.x = scene.screenWidth() / 2
+        sprite_current_item.y = scene.screenHeight() / 2
+        if (sprite_previous_item) {
+            sprite_previous_item.right = 10
+            sprite_previous_item.y = scene.screenHeight() / 2
+        }
+        if (sprite_next_item) {
+            sprite_next_item.left = scene.screenWidth() - 10
+            sprite_next_item.y = scene.screenHeight() / 2
+        }
+        pause(100)
+        while (!(controller.left.isPressed() || controller.right.isPressed() || controller.A.isPressed())) {
+            pause(50)
+        }
+        if (sprite_previous_item) {
+            sprite_previous_item.destroy()
+        }
+        if (sprite_current_item) {
+            sprite_current_item.destroy()
+        }
+        if (sprite_next_item) {
+            sprite_next_item.destroy()
+        }
+        if (controller.left.isPressed()) {
+            if (selected_item > 0) {
+                selected_item += -1
+            }
+        } else if (controller.right.isPressed()) {
+            if (selected_item < options.length - 1) {
+                selected_item += 1
+            }
+        } else if (controller.A.isPressed()) {
+            break;
+        }
+    }
+    return selected_item
+}
 function end_build (ms: number) {
     timer.background(function () {
         story.printDialog("Woo hoo you finished!\\n" + "It took you " + format_ms(ms) + " to finish this clock." + "", scene.screenWidth() / 2, scene.screenHeight() * 0.2 + 7, scene.screenHeight() * 0.4, scene.screenWidth() - 2)
@@ -157,6 +204,11 @@ let sprite_item: Sprite = null
 let steps: blockObject.BlockObject[] = []
 let step_object: blockObject.BlockObject = null
 let sprite_step_bar: StatusBarSprite = null
+let sprite_next_item: Sprite = null
+let sprite_current_item: Sprite = null
+let sprite_previous_item: Sprite = null
+let selected_item = 0
+let options: Image[] = []
 let sprite_title: Sprite = null
 scene.setBackgroundColor(13)
 story.setPagePauseLength(1000, 2000)
@@ -173,8 +225,14 @@ timer.background(function () {
     sprite_title.ay = -500
     fade_in(true)
     fade_out(false)
-    make_hand()
-    make_plastic_clock()
+    options = [assets.image`plastic_clock_screen`, assets.image`metal_alarm_clock_screen`]
+    selected_item = show_image_menu()
+    fade_in(true)
+    fade_out(false)
+    if (selected_item == 0) {
+        make_hand()
+        make_plastic_clock()
+    }
 })
 game.onUpdate(function () {
     if (sprite_hand_pointer && sprite_item) {
