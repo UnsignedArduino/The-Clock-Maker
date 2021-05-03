@@ -16,11 +16,23 @@ namespace ImageProp {
     export const image_outline = ImageProp.create()
     export const combined = ImageProp.create()
 }
+namespace StatusBarKind {
+    export const Steps = StatusBarKind.create()
+}
+function init_step_bar (max_steps: number) {
+    sprite_step_bar = statusbars.create(scene.screenWidth() - 2, 3, StatusBarKind.Steps)
+    sprite_step_bar.x = scene.screenWidth() / 2
+    sprite_step_bar.top = 2
+    sprite_step_bar.value = 0
+    sprite_step_bar.max = max_steps * 25
+    sprite_step_bar.setColor(7, 2)
+    sprite_step_bar.setBarBorder(1, 15)
+}
 function do_step (index: number) {
     step_object = steps[index]
     timer.background(function () {
         story.clearAllText()
-        story.printDialog(blockObject.getStringProperty(step_object, StrProp.instructions), scene.screenWidth() / 2, scene.screenHeight() * 0.2 + 2, scene.screenHeight() * 0.4, scene.screenWidth() - 2)
+        story.printDialog(blockObject.getStringProperty(step_object, StrProp.instructions), scene.screenWidth() / 2, scene.screenHeight() * 0.2 + 7, scene.screenHeight() * 0.4, scene.screenWidth() - 2)
     })
     sprite_item = sprites.create(blockObject.getImageProperty(step_object, ImageProp.image), SpriteKind.Item)
     sprite_item.setPosition(blockObject.getNumberProperty(step_object, NumProp.spawn_x), blockObject.getNumberProperty(step_object, NumProp.spawn_y))
@@ -41,6 +53,7 @@ function do_step (index: number) {
         sprite_combined = sprites.create(blockObject.getImageProperty(step_object, ImageProp.combined), SpriteKind.Player)
     }
     sprite_combined.setPosition(blockObject.getNumberProperty(step_object, NumProp.target_x), blockObject.getNumberProperty(step_object, NumProp.target_y))
+    pause(1000)
 }
 function make_hand () {
     sprite_hand = sprites.create(assets.image`hand`, SpriteKind.Player)
@@ -71,8 +84,15 @@ function make_plastic_clock () {
     step_number = 0
     steps.push(make_item(assets.image`plastic_clock_face`, assets.image`plastic_clock_face_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the plastic clock cover to the center.", assets.image`plastic_clock_step_1`))
     steps.push(make_item(assets.image`plastic_clock_edge`, assets.image`plastic_clock_edge_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the plastic clock edge piece on top of the cover.", assets.image`plastic_clock_step_2`))
+    init_step_bar(steps.length)
     for (let index = 0; index <= steps.length - 1; index++) {
         do_step(index)
+        timer.background(function () {
+            for (let index2 = 0; index2 < 25; index2++) {
+                sprite_step_bar.value += 1
+                pause(25)
+            }
+        })
     }
 }
 let step_number = 0
@@ -85,6 +105,7 @@ let sprite_outline: Sprite = null
 let sprite_item: Sprite = null
 let steps: blockObject.BlockObject[] = []
 let step_object: blockObject.BlockObject = null
+let sprite_step_bar: StatusBarSprite = null
 let enable_dragging = false
 scene.setBackgroundColor(13)
 story.setPagePauseLength(1000, 2000)

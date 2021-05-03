@@ -5,7 +5,8 @@
         "device": "*",
         "Timers": "github:microsoft/arcade-timers#v1.1.0",
         "arcade-block-objects": "github:microsoft/arcade-block-objects#f486ac1d4dcc096b9297174f97f8cdef1576c7ff",
-        "arcade-story": "github:microsoft/arcade-storytelling#v1.0.1"
+        "arcade-story": "github:microsoft/arcade-storytelling#v1.0.1",
+        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.1"
     },
     "files": [
         "main.blocks",
