@@ -70,7 +70,10 @@ function make_plastic_clock () {
     steps = []
     step_number = 0
     steps.push(make_item(assets.image`plastic_clock_face`, assets.image`plastic_clock_face_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the plastic clock cover to the center.", assets.image`plastic_clock_step_1`))
-    do_step(0)
+    steps.push(make_item(assets.image`plastic_clock_edge`, assets.image`plastic_clock_edge_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the plastic clock edge piece on top of the cover.", assets.image`plastic_clock_step_2`))
+    for (let index = 0; index <= steps.length - 1; index++) {
+        do_step(index)
+    }
 }
 let step_number = 0
 let block_object: blockObject.BlockObject = null
