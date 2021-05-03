@@ -19,6 +19,20 @@ namespace ImageProp {
 namespace StatusBarKind {
     export const Steps = StatusBarKind.create()
 }
+function end_build (ms: number) {
+    timer.background(function () {
+        story.printDialog("Woo hoo you finished!\\n" + "It took you " + format_ms(ms) + " to finish this clock." + "", scene.screenWidth() / 2, scene.screenHeight() * 0.2 + 7, scene.screenHeight() * 0.4, scene.screenWidth() - 2)
+    })
+    timer.background(function () {
+        story.printDialog("Press any key to continue.", scene.screenWidth() / 2, scene.screenHeight() * 0.85, scene.screenHeight() * 0.3 - 2, scene.screenWidth() - 2)
+    })
+    while (!(controller.anyButton.isPressed())) {
+        pause(100)
+    }
+    story.clearAllText()
+    fade_in(true)
+    game.reset()
+}
 function init_step_bar (max_steps: number) {
     sprite_step_bar = statusbars.create(scene.screenWidth() - 2, 3, StatusBarKind.Steps)
     sprite_step_bar.x = scene.screenWidth() / 2
@@ -54,6 +68,18 @@ function do_step (index: number) {
     }
     sprite_combined.setPosition(blockObject.getNumberProperty(step_object, NumProp.target_x), blockObject.getNumberProperty(step_object, NumProp.target_y))
     pause(1000)
+}
+function fade_out (block: boolean) {
+    color.startFade(color.Black, color.originalPalette, 2000)
+    if (block) {
+        color.pauseUntilFadeDone()
+    }
+}
+function fade_in (block: boolean) {
+    color.startFade(color.originalPalette, color.Black, 2000)
+    if (block) {
+        color.pauseUntilFadeDone()
+    }
 }
 function make_hand () {
     sprite_hand = sprites.create(assets.image`hand`, SpriteKind.Player)
@@ -105,13 +131,7 @@ function make_plastic_clock () {
     sprite_combined.setImage(assets.image`plastic_clock_finished`)
     end_time = game.runtime()
     pause(1000)
-    timer.background(function () {
-        story.printDialog("Woo hoo you finished!\\n" + "It took you " + format_ms(end_time) + " to finish this clock." + "", scene.screenWidth() / 2, scene.screenHeight() * 0.2 + 7, scene.screenHeight() * 0.4, scene.screenWidth() - 2)
-    })
-    while (!(controller.anyButton.isPressed())) {
-        pause(100)
-    }
-    story.clearAllText()
+    end_build(end_time - start_time)
 }
 function format_ms (ms: number) {
     secs = ms / 1000
