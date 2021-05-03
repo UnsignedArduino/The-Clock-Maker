@@ -89,6 +89,7 @@ function make_plastic_clock () {
     steps.push(make_item(assets.image`plastic_clock_gear_box`, assets.image`plastic_clock_gear_box_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the gear box on top of the hour arm.", assets.image`plastic_clock_step_5`))
     steps.push(make_item(assets.image`plastic_clock_backplate`, assets.image`plastic_clock_backplate_outline`, scene.screenWidth() - 16, scene.screenHeight() / 2, scene.screenWidth() / 2, scene.screenHeight() / 2, "Drag the back plate on top of the gear box.", assets.image`plastic_clock_step_6`))
     init_step_bar(steps.length)
+    start_time = game.runtime()
     for (let index = 0; index <= steps.length - 1; index++) {
         do_step(index)
         timer.background(function () {
@@ -102,7 +103,26 @@ function make_plastic_clock () {
     story.clearAllText()
     pause(1000)
     sprite_combined.setImage(assets.image`plastic_clock_finished`)
+    end_time = game.runtime()
+    pause(1000)
+    timer.background(function () {
+        story.printDialog("Woo hoo you finished!\\n" + "It took you " + format_ms(end_time) + " to finish this clock." + "", scene.screenWidth() / 2, scene.screenHeight() * 0.2 + 7, scene.screenHeight() * 0.4, scene.screenWidth() - 2)
+    })
+    while (!(controller.anyButton.isPressed())) {
+        pause(100)
+    }
+    story.clearAllText()
 }
+function format_ms (ms: number) {
+    secs = ms / 1000
+    mins = Math.idiv(secs, 60)
+    secs = secs - mins * 60
+    return "" + mins + "m " + secs + "s"
+}
+let mins = 0
+let secs = 0
+let end_time = 0
+let start_time = 0
 let step_number = 0
 let block_object: blockObject.BlockObject = null
 let item_dragging: Sprite = null
