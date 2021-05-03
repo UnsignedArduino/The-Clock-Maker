@@ -21,6 +21,9 @@ function do_step (index: number) {
         story.clearAllText()
         story.printDialog(blockObject.getStringProperty(step_object, StrProp.instructions), scene.screenWidth() / 2, scene.screenHeight() * 0.2 + 2, scene.screenHeight() * 0.4, scene.screenWidth() - 2)
     })
+    if (sprite_item) {
+        sprite_item.destroy()
+    }
     sprite_item = sprites.create(blockObject.getImageProperty(step_object, ImageProp.image), SpriteKind.Item)
     sprite_item.setPosition(blockObject.getNumberProperty(step_object, NumProp.spawn_x), blockObject.getNumberProperty(step_object, NumProp.spawn_y))
     sprite_item.z = 1
@@ -32,6 +35,7 @@ function do_step (index: number) {
     }
     enable_dragging = false
     story.spriteMoveToLocation(sprite_item, sprite_outline.x, sprite_outline.y, 50)
+    sprite_outline.destroy()
 }
 function make_hand () {
     sprite_hand = sprites.create(assets.image`hand`, SpriteKind.Player)
