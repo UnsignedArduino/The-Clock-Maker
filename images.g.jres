@@ -1,0 +1,22 @@
+{
+    "k^I?+s@OWOQ+hE7Zz?Ts": {
+        "data": "hwQKAAoAAAAAAAD/AAAAAPD/8BEPAAAAH7H/G/EAAAC/Efu/8QAAAPAfERHxAAAA8LEREfEAAADwHxER8QAAAPCxERHxAAAAAP8REQ8AAAAAAP//AAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "hand"
+    },
+    "|,^rp!$lEyq}W{(+8Xd9": {
+        "data": "hwQKAAoAAAAAAP//AAAAAAD/8bEPAAAA8BHxsfsAAADwsRER+wAAAPAfERH7AAAA8LEREfEAAADwHxER8QAAAPCxERHxAAAAAP8REQ8AAAAAAP//AAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "hand_pressed"
+    },
+    "^sYT5-Z8c;Sj(p{Onb6%": {
+        "data": "hwQBAAEAAAADAAAA",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "hand_pointer"
+    },
+    "*": {
+        "mimeType": "image/x-mkcd-f4",
+        "dataEncoding": "base64",
+        "namespace": "myImages"
+    }
+}
